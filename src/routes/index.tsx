@@ -26,6 +26,26 @@ const StarterPages = React.lazy(() => import('../pages/other/Starter'))
 const ContactListPages = React.lazy(() => import('../pages/other/ContactList'))
 const TimelinePages = React.lazy(() => import('../pages/other/Timeline'))
 
+const Librarians = React.lazy(() => import('../pages/Librarians'))
+const Readers = React.lazy(() => import('../pages/Readers'))
+const Categories = React.lazy(()=> import('../pages/Categories'))
+const Materials = React.lazy(()=> import('../pages/Materials'))
+const Authors = React.lazy(()=> import('../pages/Authors'))
+const Sales = React.lazy(()=> import('../pages/Sales'))
+// const Statistics = React.lazy(()=> import('../pages/Statistics'))
+const CustomerCares = React.lazy(()=> import('../pages/Notifications/CustomerCare'))
+const BulkNotifications = React.lazy(()=> import('../pages/Notifications/BulkNotifications'))
+const MobileSetting = React.lazy(()=> import('../pages/Settings/MobileSettings'))
+const Packages = React.lazy(()=> import('../pages/Settings/Packages'))
+const GeneralSettings = React.lazy(()=> import('../pages/Settings/GeneralSettings'))
+
+const Orders = React.lazy(()=> import('../pages/Shop/Orders'))
+const ProductCategory = React.lazy(()=> import('../pages/Shop/ProductCategory'))
+const Products = React.lazy(()=> import('../pages/Shop/Products'))
+
+
+
+
 // // base ui
 const Accordions = React.lazy(() => import('../pages/ui/Accordions'))
 const Alerts = React.lazy(() => import('../pages/ui/Alerts'))
@@ -129,6 +149,90 @@ const dashboardRoutes: RoutesProps = {
 			path: '/dashboard',
 			name: 'Dashboard',
 			element: <Dashboard />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/librarians',
+			name: 'Librarians',
+			element: <Librarians />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/readers',
+			name: 'Readers',
+			element: <Readers />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/categories',
+			name: 'categories',
+			element: <Categories />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/materials',
+			name: 'Materials',
+			element: <Materials />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/authors',
+			name: 'Authors',
+			element: <Authors />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/sales',
+			name: 'Sales',
+			element: <Sales />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/settings/mobile-settings',
+			name: 'MobileSetting',
+			element: <MobileSetting />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/settings/packages',
+			name: 'Packages',
+			element: <Packages />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/settings/general-settings',
+			name: 'GeneralSettings',
+			element: <GeneralSettings />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/notifications/customer-care',
+			name: 'CustomerCares',
+			element: <CustomerCares />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/notifications/bulk-notifications',
+			name: 'BulkNotifications',
+			element: <BulkNotifications />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/shop/orders',
+			name: 'Orders',
+			element: <Orders />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/shop/product-category',
+			name: 'ProductCategory',
+			element: <ProductCategory />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/shop/product',
+			name: 'Products',
+			element: <Products />,
 			route: PrivateRoute,
 		},
 	],

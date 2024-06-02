@@ -68,6 +68,7 @@ const DataTables = () => {
 							<p className="text-muted mb-0">
 								A simple example of table with pagination and column sorting
 							</p>
+							
 						</Card.Header>
 						<Card.Body>
 							<Table<Employee>
