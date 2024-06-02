@@ -3,7 +3,6 @@ import {
 	Card,
 	Col,
 	Row,
-	Collapse as BootstrapCollapse,
 } from 'react-bootstrap'
 
 // css
@@ -16,10 +15,9 @@ import { Column } from 'react-table'
 import { Employee } from './types'
 
 // components
-import { FormInput, PageSize, Table } from '@/components'
+import {  PageSize, Table } from '@/components'
 import { PageBreadcrumb } from '@/components'
-import { useState } from 'react'
-import { DateRangePicker } from 'rsuite'
+
 
 const columns: ReadonlyArray<Column> = [
 	{

@@ -3,7 +3,6 @@ import {
 	Card,
 	Col,
 	Row,
-	
 } from 'react-bootstrap'
 
 // css
