@@ -28,42 +28,45 @@ const columns: ReadonlyArray<Column> = [
 		defaultCanSort: true,
 	},
 	{
-		Header: 'CreateDate',
-		accessor: 'createDate',
-		defaultCanSort: true,
-	},
-	{
-		Header: 'Name',
+		Header: 'image',
 		accessor: 'name',
-		defaultCanSort: false,
-	},
-	{
-		Header: 'NIC',
-		accessor: 'nic',
 		defaultCanSort: true,
 	},
 	{
-		Header: 'Contact No',
-		accessor: 'contactNo',
+		Header: 'Book Name',
+		accessor: 'bookname',
 		defaultCanSort: false,
 	},
 	{
-		Header: 'Email',
-		accessor: 'email',
-		defaultCanSort: false,
+		Header: 'Author',
+		accessor: 'author',
+		defaultCanSort: true,
 	},
 	{
-		Header: 'Menu Access',
-		accessor: 'menuAccess',
-		defaultCanSort: false,
+		Header: 'Category Name',
+		accessor: 'Category Name',
+		defaultCanSort: true,
+	},
+	{
+		Header: 'Book Type',
+		accessor: 'Book Type',
+		defaultCanSort: true,
+	},
+	{
+		Header: 'View Library',
+		accessor: 'View Library',
+		defaultCanSort: true,
+	},
+	{
+		Header: 'View Frequency',
+		accessor: 'View Frequency',
+		defaultCanSort: true,
 	},
 	{
 		Header: 'Action',
 		accessor: 'action',
 		defaultCanSort: false,
 	},
-	
-	
 ]
 
 const sizePerPageList: PageSize[] = [
@@ -96,24 +99,14 @@ const Materials = () => {
 					<Card>
 						<Card.Header>
 							<div className="my-2 d-flex justify-content-between">
-								<Button variant="info">
-									<i className="bi bi-plus-lg" /> <span>Add New</span>
-								</Button>
-								<div className="d-flex gap-1">
-									<Button variant="purple">
-										<i className="ri-server-line me-1" /> <span>All</span>
-									</Button>
-									<Button className="btn-outline-primary">
-										<i className="ri-server-line me-1" /> <span>Active</span>
-									</Button>
-									<Button className="btn-outline-danger">
-										<i className="ri-server-line me-1" /> <span>Inactive</span>
-									</Button>
-								</div>
-							</div>
 							<Button className="btn-outline-purple" onClick={toggle}>
 								<i className="ri-equalizer-line me-1" /> Filter
 							</Button>
+								<Button variant="info">
+									<i className="bi bi-plus-lg" /> <span>Add New E-Book</span>
+								</Button>
+							</div>
+							
 						</Card.Header>
 						<Card.Body>
 							<BootstrapCollapse in={isOpen}>

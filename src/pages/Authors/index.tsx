@@ -28,38 +28,63 @@ const columns: ReadonlyArray<Column> = [
 		defaultCanSort: true,
 	},
 	{
-		Header: 'CreateDate',
-		accessor: 'createDate',
+		Header: 'Profile Picture',
+		accessor: 'profilePicture',
 		defaultCanSort: true,
 	},
 	{
-		Header: 'Name',
+		Header: 'Author First Name',
 		accessor: 'name',
 		defaultCanSort: false,
 	},
 	{
-		Header: 'NIC',
-		accessor: 'nic',
+		Header: 'Author Last Name',
+		accessor: 'AuthorLastName',
+		defaultCanSort: false,
+	},
+	{
+		Header: 'Author Pen Name',
+		accessor: 'AuthorPenName',
+		defaultCanSort: false,
+	},
+	{
+		Header: 'Died',
+		accessor: 'Died',
+		defaultCanSort: false,
+	},
+	{
+		Header: 'Nationality',
+		accessor: 'nationality',
+		defaultCanSort: false,
+	},
+	{
+		Header: 'First Published Date',
+		accessor: 'First Published Date',
 		defaultCanSort: true,
 	},
 	{
-		Header: 'Contact No',
-		accessor: 'contactNo',
+		Header: 'Position',
+		accessor: 'Position',
+		defaultCanSort: false,
+	},
+	{
+		Header: 'Income',
+		accessor: 'Income',
+		defaultCanSort: false,
+	},
+	{
+		Header: 'Phone',
+		accessor: 'Phone',
 		defaultCanSort: false,
 	},
 	{
 		Header: 'Email',
-		accessor: 'email',
+		accessor: 'Email',
 		defaultCanSort: false,
 	},
 	{
-		Header: 'Menu Access',
-		accessor: 'menuAccess',
-		defaultCanSort: false,
-	},
-	{
-		Header: 'Action',
-		accessor: 'action',
+		Header: 'Actions',
+		accessor: 'Actions',
 		defaultCanSort: false,
 	},
 	
@@ -90,30 +115,20 @@ const Authors = () => {
 	const toggle = () => setIsOpen(!isOpen)
 	return (
 		<>
-			<PageBreadcrumb title="Authors" subName="Tables" />
+			<PageBreadcrumb title="Authors List" subName="Authors" />
 			<Row>
 				<Col>
 					<Card>
 						<Card.Header>
 							<div className="my-2 d-flex justify-content-between">
-								<Button variant="info">
-									<i className="bi bi-plus-lg" /> <span>Add New</span>
-								</Button>
-								<div className="d-flex gap-1">
-									<Button variant="purple">
-										<i className="ri-server-line me-1" /> <span>All</span>
-									</Button>
-									<Button className="btn-outline-primary">
-										<i className="ri-server-line me-1" /> <span>Active</span>
-									</Button>
-									<Button className="btn-outline-danger">
-										<i className="ri-server-line me-1" /> <span>Inactive</span>
-									</Button>
-								</div>
-							</div>
 							<Button className="btn-outline-purple" onClick={toggle}>
 								<i className="ri-equalizer-line me-1" /> Filter
 							</Button>
+								<Button variant="info">
+									<i className="bi bi-plus-lg" /> <span>Add Author</span>
+								</Button>
+								
+							</div>
 						</Card.Header>
 						<Card.Body>
 							<BootstrapCollapse in={isOpen}>

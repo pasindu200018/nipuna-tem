@@ -86,8 +86,6 @@ const sizePerPageList: PageSize[] = [
 ]
 
 const Products = () => {
-	const [isOpen, setIsOpen] = useState<boolean>(false)
-	const toggle = () => setIsOpen(!isOpen)
 	return (
 		<>
 			<PageBreadcrumb title="Products" subName="Orders" />
@@ -97,53 +95,10 @@ const Products = () => {
 						<Card.Header>
 							<div className="my-2 d-flex justify-content-between">
 								<Button variant="info">
-									<i className="bi bi-plus-lg" /> <span>Add New</span>
+									<i className="bi bi-plus-lg" /> <span>Add New Products</span>
 								</Button>
-								<div className="d-flex gap-1">
-									<Button variant="purple">
-										<i className="ri-server-line me-1" /> <span>All</span>
-									</Button>
-									<Button className="btn-outline-primary">
-										<i className="ri-server-line me-1" /> <span>Active</span>
-									</Button>
-									<Button className="btn-outline-danger">
-										<i className="ri-server-line me-1" /> <span>Inactive</span>
-									</Button>
-								</div>
-							</div>
-							<Button className="btn-outline-purple" onClick={toggle}>
-								<i className="ri-equalizer-line me-1" /> Filter
-							</Button>
+							</div>				
 						</Card.Header>
-						<Card.Body>
-							<BootstrapCollapse in={isOpen}>
-								<div>
-									<Row>
-										<Col lg={4}>
-											<FormInput
-												label="Search Name"
-												type="text"
-												name="text"
-												containerClass="mb-3"
-												key="text"
-											/>
-										</Col>
-
-										<Col lg={4}>
-											<div className="mb-3">
-												<label className="form-label d-block">Date Range</label>
-												<DateRangePicker
-													className="w-100"
-													appearance="default"
-													defaultValue={[new Date(), new Date()]}
-												/>
-											</div>
-										</Col>
-									</Row>
-								</div>
-							</BootstrapCollapse>
-						</Card.Body>
-
 						<Card.Body>
 							<Table<Employee>
 								columns={columns}

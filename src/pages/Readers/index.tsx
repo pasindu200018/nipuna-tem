@@ -37,11 +37,7 @@ const columns: ReadonlyArray<Column> = [
 		accessor: 'name',
 		defaultCanSort: false,
 	},
-	{
-		Header: 'NIC',
-		accessor: 'nic',
-		defaultCanSort: true,
-	},
+
 	{
 		Header: 'Contact No',
 		accessor: 'contactNo',
@@ -53,8 +49,13 @@ const columns: ReadonlyArray<Column> = [
 		defaultCanSort: false,
 	},
 	{
-		Header: 'Menu Access',
-		accessor: 'menuAccess',
+		Header: 'Subscribed Plans',
+		accessor: 'subscribedPlans',
+		defaultCanSort: false,
+	},
+	{
+		Header: 'Status',
+		accessor: 'status',
 		defaultCanSort: false,
 	},
 	{

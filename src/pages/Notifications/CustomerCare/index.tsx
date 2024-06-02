@@ -1,14 +1,10 @@
 import {
-	Button,
 	Card,
 	Col,
 	Row,
-	Collapse as BootstrapCollapse,
 } from 'react-bootstrap'
 
-// css
-import 'react-bootstrap-typeahead/css/Typeahead.css'
-import 'rsuite/dist/rsuite-no-reset.min.css'
+
 
 //dummy data
 import { employeeRecords } from './data'
@@ -16,10 +12,9 @@ import { Column } from 'react-table'
 import { Employee } from './types'
 
 // components
-import { FormInput, PageSize, Table } from '@/components'
+import {  PageSize, Table } from '@/components'
 import { PageBreadcrumb } from '@/components'
-import { useState } from 'react'
-import { DateRangePicker } from 'rsuite'
+
 
 const columns: ReadonlyArray<Column> = [
 	{
@@ -28,42 +23,25 @@ const columns: ReadonlyArray<Column> = [
 		defaultCanSort: true,
 	},
 	{
-		Header: 'CreateDate',
-		accessor: 'createDate',
-		defaultCanSort: true,
-	},
-	{
-		Header: 'Name',
+		Header: 'User Name',
 		accessor: 'name',
-		defaultCanSort: false,
-	},
-	{
-		Header: 'NIC',
-		accessor: 'nic',
 		defaultCanSort: true,
-	},
-	{
-		Header: 'Contact No',
-		accessor: 'contactNo',
-		defaultCanSort: false,
 	},
 	{
 		Header: 'Email',
-		accessor: 'email',
+		accessor: 'Email',
 		defaultCanSort: false,
 	},
 	{
-		Header: 'Menu Access',
-		accessor: 'menuAccess',
-		defaultCanSort: false,
+		Header: 'Query',
+		accessor: 'Query',
+		defaultCanSort: true,
 	},
 	{
 		Header: 'Action',
-		accessor: 'action',
+		accessor: 'Action',
 		defaultCanSort: false,
-	},
-	
-	
+	},	
 ]
 
 const sizePerPageList: PageSize[] = [
@@ -85,16 +63,16 @@ const sizePerPageList: PageSize[] = [
 	},
 ]
 
-const Categories = () => {
-	const [isOpen, setIsOpen] = useState<boolean>(false)
-	const toggle = () => setIsOpen(!isOpen)
+const CustomerCare = () => {
+	// const [isOpen, setIsOpen] = useState<boolean>(false)
+	// const toggle = () => setIsOpen(!isOpen)
 	return (
 		<>
-			<PageBreadcrumb title="Categories" subName="Tables" />
+			<PageBreadcrumb title="Customer Care" subName="Notifications" />
 			<Row>
 				<Col>
 					<Card>
-						<Card.Header>
+						{/* <Card.Header>
 							<div className="my-2 d-flex justify-content-between">
 								<Button variant="info">
 									<i className="bi bi-plus-lg" /> <span>Add New</span>
@@ -142,7 +120,7 @@ const Categories = () => {
 									</Row>
 								</div>
 							</BootstrapCollapse>
-						</Card.Body>
+						</Card.Body> */}
 
 						<Card.Body>
 							<Table<Employee>
@@ -161,4 +139,4 @@ const Categories = () => {
 	)
 }
 
-export default Categories
+export default CustomerCare

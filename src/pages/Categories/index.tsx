@@ -28,34 +28,19 @@ const columns: ReadonlyArray<Column> = [
 		defaultCanSort: true,
 	},
 	{
-		Header: 'CreateDate',
-		accessor: 'createDate',
-		defaultCanSort: true,
-	},
-	{
-		Header: 'Name',
+		Header: 'Materials',
 		accessor: 'name',
-		defaultCanSort: false,
-	},
-	{
-		Header: 'NIC',
-		accessor: 'nic',
 		defaultCanSort: true,
 	},
 	{
-		Header: 'Contact No',
-		accessor: 'contactNo',
+		Header: 'Category',
+		accessor: 'category',
 		defaultCanSort: false,
 	},
 	{
-		Header: 'Email',
-		accessor: 'email',
-		defaultCanSort: false,
-	},
-	{
-		Header: 'Menu Access',
-		accessor: 'menuAccess',
-		defaultCanSort: false,
+		Header: 'Sub Category',
+		accessor: 'subcategory',
+		defaultCanSort: true,
 	},
 	{
 		Header: 'Action',

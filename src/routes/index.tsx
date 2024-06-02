@@ -33,8 +33,10 @@ const Materials = React.lazy(()=> import('../pages/Materials'))
 const Authors = React.lazy(()=> import('../pages/Authors'))
 const Sales = React.lazy(()=> import('../pages/Sales'))
 // const Statistics = React.lazy(()=> import('../pages/Statistics'))
+
 const CustomerCares = React.lazy(()=> import('../pages/Notifications/CustomerCare'))
 const BulkNotifications = React.lazy(()=> import('../pages/Notifications/BulkNotifications'))
+
 const MobileSetting = React.lazy(()=> import('../pages/Settings/MobileSettings'))
 const Packages = React.lazy(()=> import('../pages/Settings/Packages'))
 const GeneralSettings = React.lazy(()=> import('../pages/Settings/GeneralSettings'))

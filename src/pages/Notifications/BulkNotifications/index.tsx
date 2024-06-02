@@ -85,35 +85,33 @@ const sizePerPageList: PageSize[] = [
 	},
 ]
 
-const Categories = () => {
+const BulkNotification = () => {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const toggle = () => setIsOpen(!isOpen)
 	return (
 		<>
-			<PageBreadcrumb title="Categories" subName="Tables" />
+			<PageBreadcrumb title="Bulk" subName="Notification" />
 			<Row>
 				<Col>
 					<Card>
 						<Card.Header>
 							<div className="my-2 d-flex justify-content-between">
-								<Button variant="info">
-									<i className="bi bi-plus-lg" /> <span>Add New</span>
-								</Button>
 								<div className="d-flex gap-1">
-									<Button variant="purple">
-										<i className="ri-server-line me-1" /> <span>All</span>
-									</Button>
-									<Button className="btn-outline-primary">
-										<i className="ri-server-line me-1" /> <span>Active</span>
-									</Button>
-									<Button className="btn-outline-danger">
-										<i className="ri-server-line me-1" /> <span>Inactive</span>
-									</Button>
+
+								<Button variant="info">
+									<i className="bi bi-plus-lg" /> <span>Send SMS</span>
+								</Button>
+								<Button variant="info">
+									<i className="bi bi-plus-lg" /> <span>Send Email</span>
+								</Button>
+								<Button variant="info">
+									<i className="bi bi-plus-lg" /> <span>Send Notification</span>
+								</Button>
 								</div>
-							</div>
 							<Button className="btn-outline-purple" onClick={toggle}>
 								<i className="ri-equalizer-line me-1" /> Filter
 							</Button>
+							</div>
 						</Card.Header>
 						<Card.Body>
 							<BootstrapCollapse in={isOpen}>
@@ -161,4 +159,4 @@ const Categories = () => {
 	)
 }
 
-export default Categories
+export default BulkNotification

@@ -90,27 +90,11 @@ const Orders = () => {
 	const toggle = () => setIsOpen(!isOpen)
 	return (
 		<>
-			<PageBreadcrumb title="Orders" subName="Shop" />
+			<PageBreadcrumb title="Orders List" subName="Shop" />
 			<Row>
 				<Col>
 					<Card>
 						<Card.Header>
-							<div className="my-2 d-flex justify-content-between">
-								<Button variant="info">
-									<i className="bi bi-plus-lg" /> <span>Add New</span>
-								</Button>
-								<div className="d-flex gap-1">
-									<Button variant="purple">
-										<i className="ri-server-line me-1" /> <span>All</span>
-									</Button>
-									<Button className="btn-outline-primary">
-										<i className="ri-server-line me-1" /> <span>Active</span>
-									</Button>
-									<Button className="btn-outline-danger">
-										<i className="ri-server-line me-1" /> <span>Inactive</span>
-									</Button>
-								</div>
-							</div>
 							<Button className="btn-outline-purple" onClick={toggle}>
 								<i className="ri-equalizer-line me-1" /> Filter
 							</Button>
