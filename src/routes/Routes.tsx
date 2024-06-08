@@ -46,7 +46,7 @@ const AllRoutes = (props: IRoutesProps) => {
 						<Route
 							path={route.path}
 							element={
-								isAuthenticated === false ? (
+								isAuthenticated === true ? (
 									<Navigate
 										to={{
 											pathname: '/auth/login',

@@ -23,6 +23,7 @@ import {
 } from '@/components'
 import { useThemeCustomizer } from '@/components'
 import { useViewport } from '@/hooks'
+import { useSelector } from 'react-redux'
 /**
  * for subtraction minutes
  */
@@ -170,6 +171,7 @@ type TopbarProps = {
 	navOpen?: boolean
 }
 const Topbar = ({ toggleMenu, navOpen }: TopbarProps) => {
+	const { userInfo } = useSelector((state: any) => state.auth);
 	const { sideBarType } = useThemeCustomizer()
 	const { width } = useViewport()
 
@@ -326,11 +328,13 @@ const Topbar = ({ toggleMenu, navOpen }: TopbarProps) => {
 							</div>
 						</li>
 						<li className="dropdown">
-							<ProfileDropdown
-								menuItems={profileMenus}
-								userImage={profilePic}
-								username="Thomson"
-							/>
+							{userInfo ? (
+								<ProfileDropdown
+									menuItems={profileMenus}
+									userImage={profilePic}
+									username={userInfo?.email}
+								/>
+							):''}
 						</li>
 					</ul>
 				</div>

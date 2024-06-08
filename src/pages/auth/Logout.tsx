@@ -9,11 +9,15 @@ import shield from '@/assets/images/svg/shield.gif'
 
 // components
 import { PageBreadcrumb } from '@/components'
+import { useDispatch } from 'react-redux'
+import { logout } from '@/features/authSlice'
 
 const Logout = () => {
+	const dispatch = useDispatch();
 	const { removeSession } = useAuthContext()
 
 	useEffect(() => {
+		dispatch(logout())
 		removeSession()
 	}, [removeSession])
 

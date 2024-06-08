@@ -1,12 +1,17 @@
-import { Button, Col, Row } from 'react-bootstrap'
-import { Link, Navigate } from 'react-router-dom'
+import { Button, Col, Row, Spinner } from 'react-bootstrap'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import AuthLayout from '../AuthLayout'
-import useLogin from './useLogin'
 
 // components
 import { VerticalForm, FormInput, PageBreadcrumb } from '@/components'
+import { useLoginMutation } from '@/api/authSlice'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { setUser } from '@/features/authSlice'
+
 
 interface UserData {
 	email: string
@@ -21,8 +26,7 @@ const BottomLinks = () => {
 					Don't have an account?{' '}
 					<Link
 						to="/auth/register"
-						className="text-dark fw-bold ms-1 link-offset-3 text-decoration-underline"
-					>
+						className="text-dark fw-bold ms-1 link-offset-3 text-decoration-underline">
 						<b>Sign up</b>
 					</Link>
 				</p>
@@ -30,7 +34,6 @@ const BottomLinks = () => {
 		</Row>
 	)
 }
-
 const schemaResolver = yupResolver(
 	yup.object().shape({
 		email: yup.string().required('Please enter Username'),
@@ -38,30 +41,58 @@ const schemaResolver = yupResolver(
 	})
 )
 const Login = () => {
-	const { loading, login, redirectUrl, isAuthenticated } = useLogin()
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const [email, setEmail] = useState('nipuna@gmail.com')
+	const [password, setPassword] = useState('12345678')
+	const [login, { isLoading }] = useLoginMutation()
+
+	const submitHandler = async () => {
+		if (!email || !password) {
+			toast.error('Please fill in all fields')
+			return
+		}
+		try {
+			const res: any = await login({ email, password })
+			if (res?.data?.token) {
+				toast.success(res?.data?.message)
+				console.log(res.data.user)
+				dispatch(setUser({token:res?.data?.token,userInfo:res?.data?.user}))
+				navigate("/", { replace: true });
+			}
+			else if (res?.error) {
+				toast.error(res?.error?.data?.message)
+			} 
+		} catch (error) {
+			toast.error('Something went wrong')
+			console.log('Error', error)
+		}
+	}
+
 	return (
 		<>
 			<PageBreadcrumb title="Log In" />
 
-			{isAuthenticated && <Navigate to={redirectUrl} replace />}
+			{false && <Navigate to="/" replace />}
 
 			<AuthLayout
 				authTitle="Sign In"
 				helpText="Enter your email address and password to access account."
 				bottomLinks={<BottomLinks />}
-				hasThirdPartyLogin
-			>
+				hasThirdPartyLogin>
 				<VerticalForm<UserData>
-					onSubmit={login}
+					onSubmit={submitHandler}
 					resolver={schemaResolver}
-					defaultValues={{ email: 'velonic@techzaa.com', password: 'Velonic' }}
-				>
+					defaultValues={{ email: 'nipuna@gmail.com', password: '1234567' }}>
 					<FormInput
 						label="Email address"
 						type="text"
 						name="email"
 						placeholder="Enter your email"
 						containerClass="mb-3"
+						onChange={(e) => setEmail(e.target.value)}
+						defaultValue={email}
 						required
 					/>
 					<FormInput
@@ -72,7 +103,8 @@ const Login = () => {
 						id="password"
 						placeholder="Enter your password"
 						containerClass="mb-3"
-					>
+						onChange={(e) => setPassword(e.target.value)}
+						defaultValue={password}>
 						<Link to="/auth/forgot-password" className="text-muted float-end">
 							<small>Forgot your password?</small>
 						</Link>
@@ -88,10 +120,14 @@ const Login = () => {
 							variant="soft-primary"
 							className="w-100"
 							type="submit"
-							disabled={loading}
-						>
-							<i className="ri-login-circle-fill me-1" />{' '}
-							<span className="fw-bold">Log In</span>{' '}
+							// disabled={loading}
+							onClick={submitHandler}>
+							{isLoading ? (
+								<Spinner size="sm" className='me-1'/>
+							) : <i className="ri-login-circle-fill me-1" />}
+								<>
+									<span className="fw-bold">Log In</span>
+								</>
 						</Button>
 					</div>
 				</VerticalForm>

@@ -21,6 +21,8 @@ import { PageBreadcrumb } from '@/components'
 import { useState } from 'react'
 import { DateRangePicker } from 'rsuite'
 
+
+
 const columns: ReadonlyArray<Column> = [
 	{
 		Header: 'Sr No',
@@ -69,6 +71,8 @@ const sizePerPageList: PageSize[] = [
 ]
 
 const Categories = () => {
+
+
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const toggle = () => setIsOpen(!isOpen)
 	return (
