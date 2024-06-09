@@ -509,7 +509,7 @@ const Checkboxes = () => {
 						<Form.Check id="customCheck2" label="Check this custom checkbox" />
 					</div>
 					<h6 className="fs-15 mt-3">Inline</h6>
-					<div className="mt-2">
+					<div className="mt-2 ">
 						<Form.Check
 							className="form-check-inline"
 							id="customCheck3"
