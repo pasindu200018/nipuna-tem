@@ -4,6 +4,8 @@ import {
 	Col,
 	Row,
 	Collapse as BootstrapCollapse,
+	Form,
+	Modal,
 } from 'react-bootstrap'
 
 // css
@@ -20,8 +22,7 @@ import { FormInput, PageSize, Table } from '@/components'
 import { PageBreadcrumb } from '@/components'
 import { useState } from 'react'
 import { DateRangePicker } from 'rsuite'
-
-
+import { useToggle } from '@/hooks'
 
 const columns: ReadonlyArray<Column> = [
 	{
@@ -71,33 +72,97 @@ const sizePerPageList: PageSize[] = [
 ]
 
 const Categories = () => {
-
+	const [subCategoryModalOpen, setSubCategoryModalOpen] =
+		useState<boolean>(false)
+	const [isStandardOpen, toggleStandard] = useToggle()
 
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const toggle = () => setIsOpen(!isOpen)
+	console.log(isStandardOpen)
 	return (
 		<>
+			{/*  category modal  */}
+			<Modal show={isStandardOpen} onHide={toggleStandard}>
+				<Modal.Header onHide={toggleStandard} closeButton>
+					<Modal.Title as="h4">Add New Category</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<FormInput
+						label="Category Name"
+						type="text"
+						name="categoryName"
+						containerClass="mb-3"
+						key="text"
+					/>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="light" onClick={toggleStandard}>
+						Close
+					</Button>
+					<Button variant="primary" onClick={toggleStandard}>
+						Create
+					</Button>
+				</Modal.Footer>
+			</Modal>
+			{/*  category modal end */}
+			{/* Sub category modal  */}
+			<Modal show={subCategoryModalOpen}>
+				<Modal.Header>
+					<Modal.Title as="h4">Add New Sub Category</Modal.Title>
+				</Modal.Header>
+
+				<Modal.Body>
+					<h6 className="fs-15 mt-3">Category</h6>
+					<Form.Select aria-label="Floating label select example">
+						<option defaultValue="selected">Active</option>
+						<option defaultValue="2">Inactive</option>
+					</Form.Select>
+					<FormInput
+						label="Category Name"
+						type="text"
+						name="categoryName"
+						containerClass="mb-3"
+						key="text"
+					/>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button
+						variant="light"
+						onClick={() => setSubCategoryModalOpen(false)}>
+						Close
+					</Button>
+					<Button
+						variant="primary"
+						onClick={() => setSubCategoryModalOpen(false)}>
+						Create
+					</Button>
+				</Modal.Footer>
+			</Modal>
+			{/* Sub category modal end */}
 			<PageBreadcrumb title="Categories" subName="Tables" />
 			<Row>
 				<Col>
 					<Card>
 						<Card.Header>
 							<div className="my-2 d-flex justify-content-between">
-							<Button className="btn-outline-purple" onClick={toggle}>
-								<i className="ri-equalizer-line me-1" /> Filter
-							</Button>
+								<Button className="btn-outline-purple" onClick={toggle}>
+									<i className="ri-equalizer-line me-1" /> Filter
+								</Button>
 								<div className="d-flex gap-1">
-									<Button variant="info">
+									<Button variant="info" onClick={toggleStandard}>
 										<i className="ri-server-line me-1" />{' '}
 										<span>Add Category</span>
 									</Button>
-									<Button variant="info">
+									<Button
+										variant="info"
+										onClick={() =>
+											setSubCategoryModalOpen(!subCategoryModalOpen)
+										}>
 										<i className="ri-server-line me-1" />{' '}
 										<span>Add Sub Category</span>
 									</Button>
 								</div>
 							</div>
-							
 						</Card.Header>
 						<Card.Body>
 							<BootstrapCollapse in={isOpen}>

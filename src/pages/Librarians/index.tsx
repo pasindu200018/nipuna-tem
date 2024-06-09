@@ -90,12 +90,12 @@ const Librarians = () => {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const toggle = () => setIsOpen(!isOpen)
 	const [isStandardOpen, toggleStandard] = useToggle()
-	const { openModalWithScroll } = useModal()
+
 	return (
 		<>
 			<Modal show={isStandardOpen} onHide={toggleStandard}>
 				<Modal.Header onHide={toggleStandard} closeButton>
-					<Modal.Title as="h4">Add New Librarian</Modal.Title>
+					<Modal.Title as="h4">Add New Reader</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<FormInput
