@@ -4,6 +4,7 @@ import {
 	Col,
 	Row,
 	Collapse as BootstrapCollapse,
+	Modal,
 } from 'react-bootstrap'
 
 // css
@@ -20,6 +21,7 @@ import { FormInput, PageSize, Table } from '@/components'
 import { PageBreadcrumb } from '@/components'
 import { useState } from 'react'
 import { DateRangePicker } from 'rsuite'
+import { useToggle } from '@/hooks'
 
 const columns: ReadonlyArray<Column> = [
 	{
@@ -89,8 +91,11 @@ const sizePerPageList: PageSize[] = [
 ]
 
 const Materials = () => {
-	const [isOpen, setIsOpen] = useState<boolean>(true)
-	const toggle = () => setIsOpen(!isOpen)
+	const [isOpenFilter, setIsOpenFilter] = useState<boolean>(true)
+
+
+	const toggle = () => setIsOpenFilter(!isOpenFilter)
+
 	return (
 		<>
 			<PageBreadcrumb title="Materials" subName="Tables" />
@@ -99,17 +104,14 @@ const Materials = () => {
 					<Card>
 						<Card.Header>
 							<div className="my-2 d-flex justify-content-between">
-							<Button className="btn-outline-purple" onClick={toggle}>
-								<i className="ri-equalizer-line me-1" /> Filter
-							</Button>
-								<Button variant="info">
-									<i className="bi bi-plus-lg" /> <span>Add New E-Book</span>
+								<Button className="btn-outline-purple" onClick={toggle}>
+									<i className="ri-equalizer-line me-1" /> Filter
 								</Button>
+								<ToggleBetweenModals />	
 							</div>
-							
 						</Card.Header>
 						<Card.Body>
-							<BootstrapCollapse in={isOpen}>
+							<BootstrapCollapse in={isOpenFilter}>
 								<div>
 									<Row>
 										<Col lg={4}>
@@ -155,3 +157,57 @@ const Materials = () => {
 }
 
 export default Materials
+
+const ToggleBetweenModals = () => {
+	const [isOpen, toggleModal] = useToggle()
+	const [isNextOpen, toggleNextModal] = useToggle()
+	return (
+
+		<>
+			<Button variant="info" onClick={toggleModal}>
+				<i className="bi bi-plus-lg" /> <span>Add New E-Book</span>
+			</Button>
+			
+				<Modal className="fade" show={isOpen} onHide={toggleModal} centered>
+					<Modal.Header closeButton>
+						<h5 className="modal-title">Modal 1</h5>
+					</Modal.Header>
+					<Modal.Body className="modal-body">
+						Show a second modal and hide this one with the button below.
+					</Modal.Body>
+					<Modal.Footer>
+						<Button
+							variant="primary"
+							onClick={() => {
+								toggleModal()
+								toggleNextModal()
+							}}>
+							Open second modal
+						</Button>
+					</Modal.Footer>
+				</Modal>
+				<Modal
+					className="fade"
+					show={isNextOpen}
+					onHide={toggleNextModal}
+					centered>
+					<Modal.Header closeButton>
+						<h5 className="modal-title">Modal 2</h5>
+					</Modal.Header>
+					<Modal.Body>
+						Hide this modal and show the first with the button below.
+					</Modal.Body>
+					<Modal.Footer>
+						<Button
+							variant="primary"
+							onClick={() => {
+								toggleModal()
+								toggleNextModal()
+							}}>
+							Back to first
+						</Button>
+					</Modal.Footer>
+				</Modal>
+		</>
+	)
+}

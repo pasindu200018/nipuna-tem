@@ -22,7 +22,7 @@ import { FormInput, PageSize, Table } from '@/components'
 import { PageBreadcrumb } from '@/components'
 import { useState } from 'react'
 import { DateRangePicker } from 'rsuite'
-import { useModal, useToggle } from '@/hooks'
+import {  useToggle } from '@/hooks'
 
 const columns: ReadonlyArray<Column> = [
 	{
