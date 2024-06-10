@@ -6,79 +6,87 @@ import {
 	Collapse as BootstrapCollapse,
 	Form,
 	Modal,
+	Table,
 } from 'react-bootstrap'
 
 // css
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import 'rsuite/dist/rsuite-no-reset.min.css'
 
-//dummy data
-import { employeeRecords } from './data'
-import { Column } from 'react-table'
-import { Employee } from './types'
-
 // components
-import { FormInput, PageSize, Table } from '@/components'
+import { FormInput } from '@/components'
 import { PageBreadcrumb } from '@/components'
 import { useState } from 'react'
 import { DateRangePicker } from 'rsuite'
 import { useToggle } from '@/hooks'
-
-const columns: ReadonlyArray<Column> = [
-	{
-		Header: 'Sr No',
-		accessor: 'srNo',
-		defaultCanSort: true,
-	},
-	{
-		Header: 'Materials',
-		accessor: 'name',
-		defaultCanSort: true,
-	},
-	{
-		Header: 'Category',
-		accessor: 'category',
-		defaultCanSort: false,
-	},
-	{
-		Header: 'Sub Category',
-		accessor: 'subcategory',
-		defaultCanSort: true,
-	},
-	{
-		Header: 'Action',
-		accessor: 'action',
-		defaultCanSort: false,
-	},
-]
-
-const sizePerPageList: PageSize[] = [
-	{
-		text: '5',
-		value: 5,
-	},
-	{
-		text: '10',
-		value: 10,
-	},
-	{
-		text: '25',
-		value: 25,
-	},
-	{
-		text: 'All',
-		value: employeeRecords.length,
-	},
-]
+import {
+	useCategoryAllGetQuery,
+	useCategoryCreateMutation,
+	useSubCategoryAllGetQuery,
+	useSubCategoryCreateMutation,
+} from '@/api/categorySlice'
+import { toast } from 'react-toastify'
 
 const Categories = () => {
-	const [subCategoryModalOpen, setSubCategoryModalOpen] =
-		useState<boolean>(false)
-	const [isStandardOpen, toggleStandard] = useToggle()
-
+	const [category, setCategory] = useState<String>()
+	const [subCategory, setSubCategory] = useState<String>()
+	const [categoryId, setCategoryId] = useState<String>()
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const toggle = () => setIsOpen(!isOpen)
-	console.log(isStandardOpen)
+
+	const { data: CategoryAll, refetch: categoryRefetch,isLoading: categoryLoading } =
+		useCategoryAllGetQuery(undefined)
+	const [categoryCreate] = useCategoryCreateMutation()
+	const [subCategoryAdd] = useSubCategoryCreateMutation()
+	const [subCategoryModalOpen, setSubCategoryModalOpen] =
+		useState<boolean>(false)
+	const { data: SubCategoryAll ,refetch: subCategoryRefetch } = useSubCategoryAllGetQuery(undefined)
+	const [isStandardOpen, toggleStandard] = useToggle()
+
+	console.log(SubCategoryAll)
+	const categorySave = async () => {
+		if (!category) {
+			toast.error('Please enter category name')
+			return
+		}
+		try {
+			const res = await categoryCreate({ name: category }).unwrap()
+			if (res.data.message == 'Category Created') {
+				toast.success('Category Created!')
+			}
+		} catch (err) {
+			console.log(err)
+			toast.error('Something went wrong!')
+		}
+		toggleStandard()
+		categoryRefetch()
+		await subCategoryRefetch()
+		await setCategory('')
+	}
+	const subCategorySave = async () => {
+		if (!subCategory) {
+			toast.error('Please enter sub category name')
+			return
+		}
+		try {
+			const res = await subCategoryAdd({
+				name: subCategory,
+				parentCategory: categoryId,
+			}).unwrap()
+			if (res?.message == 'Sub Category Created') {
+				toast.success('Sub Category Created!')
+			}
+		} catch (err) {
+			console.log(err)
+			toast.error('Something went wrong!')
+		}
+		setSubCategoryModalOpen(false)
+		setSubCategory('')
+		setCategoryId('')
+		await categoryRefetch()
+		await subCategoryRefetch()
+	}
+
 	return (
 		<>
 			{/*  category modal  */}
@@ -93,13 +101,14 @@ const Categories = () => {
 						name="categoryName"
 						containerClass="mb-3"
 						key="text"
+						onChange={(e) => setCategory(e.target.value)}
 					/>
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="light" onClick={toggleStandard}>
 						Close
 					</Button>
-					<Button variant="primary" onClick={toggleStandard}>
+					<Button variant="primary" onClick={categorySave}>
 						Create
 					</Button>
 				</Modal.Footer>
@@ -113,16 +122,25 @@ const Categories = () => {
 
 				<Modal.Body>
 					<h6 className="fs-15 mt-3">Category</h6>
-					<Form.Select aria-label="Floating label select example">
-						<option defaultValue="selected">Active</option>
-						<option defaultValue="2">Inactive</option>
-					</Form.Select>
+					{!categoryLoading ? (
+						<Form.Select
+							aria-label="Floating label select example"
+							onChange={(e) => setCategoryId(e.target.value)}>
+							{CategoryAll.map((category: any) => (
+								<option value={category._id}>{category.name}</option>
+							))}
+						</Form.Select>
+					) : (
+						''
+					)}
+
 					<FormInput
-						label="Category Name"
+						label="Sub Category Name"
 						type="text"
 						name="categoryName"
 						containerClass="mb-3"
 						key="text"
+						onChange={(e) => setSubCategory(e.target.value)}
 					/>
 				</Modal.Body>
 				<Modal.Footer>
@@ -131,9 +149,7 @@ const Categories = () => {
 						onClick={() => setSubCategoryModalOpen(false)}>
 						Close
 					</Button>
-					<Button
-						variant="primary"
-						onClick={() => setSubCategoryModalOpen(false)}>
+					<Button variant="primary" onClick={subCategorySave}>
 						Create
 					</Button>
 				</Modal.Footer>
@@ -194,14 +210,41 @@ const Categories = () => {
 						</Card.Body>
 
 						<Card.Body>
-							<Table<Employee>
-								columns={columns}
-								data={employeeRecords}
-								pageSize={5}
-								sizePerPageList={sizePerPageList}
-								isSortable={true}
-								pagination={true}
-							/>
+							{!categoryLoading ? (
+								<Table className="table-centered mb-0">
+									<thead>
+										<tr>
+											<th>Sr No</th>
+											<th>Materials</th>
+											<th>Category</th>
+											<th>Sub Category</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										{(CategoryAll || []).map((record: any, idx: number) => {
+											return (
+												<tr key={idx}>
+													<td>{idx + 1}</td>
+													<td>{record.library}</td>
+													<td>{record.name}</td>
+													<td className="d-flex flex-column">
+														{(SubCategoryAll || []).map(
+															(sub: any) =>
+																record._id === sub.parentCategory && (
+																	<div key={sub._id}>{sub.name}</div>
+																)
+														)}
+													</td>
+													<td>delete</td>
+												</tr>
+											)
+										})}	
+									</tbody>
+								</Table>
+							) : (
+								''
+							)}
 						</Card.Body>
 					</Card>
 				</Col>
