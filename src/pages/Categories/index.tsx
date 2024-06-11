@@ -235,7 +235,7 @@ const Categories = () => {
 							aria-label="Floating label select example"
 							onChange={(e) => setCategoryId(e.target.value)}>
 							<option defaultValue={''}></option>
-							{CategoryAll.map((category: any) => (
+							{(CategoryAll || [] ).map((category: any) => (
 								<option value={category._id}>{category.name}</option>
 							))}
 						</Form.Select>
