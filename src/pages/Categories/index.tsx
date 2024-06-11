@@ -35,12 +35,13 @@ const Categories = () => {
 	const [category, setCategory] = useState<String>()
 	const [subCategory, setSubCategory] = useState<String>()
 	const [categoryId, setCategoryId] = useState<String>()
-	const [updateCategoryId , setUpdateCategoryId] = useState<String>('')
-	const [updateCategoryName , setUpdateCategoryName] = useState<String>('')
-	
-	const [updateSubCategoryId , setUpdateSubCategoryId] = useState<String>('')
-	const [updateSubCategoryName , setUpdateSubCategoryName] = useState<String>('')
-	const [updateSubCategoryParentCategory, setUpdateSubCategoryParentCategory] = useState<String>('')
+	const [updateCategoryId, setUpdateCategoryId] = useState<String>('')
+	const [updateCategoryName, setUpdateCategoryName] = useState<String>('')
+
+	const [updateSubCategoryId, setUpdateSubCategoryId] = useState<String>('')
+	const [updateSubCategoryName, setUpdateSubCategoryName] = useState<String>('')
+	const [updateSubCategoryParentCategory, setUpdateSubCategoryParentCategory] =
+		useState<String>('')
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	// const [isOpenDeleteUpdate, setIsOpenDeleteUpdate] = useState<boolean>(false)
 	const toggle = () => setIsOpen(!isOpen)
@@ -50,20 +51,22 @@ const Categories = () => {
 		refetch: categoryRefetch,
 		isLoading: categoryLoading,
 	} = useCategoryAllGetQuery(undefined)
+
 	const [categoryCreate] = useCategoryCreateMutation()
 	const [subCategoryAdd] = useSubCategoryCreateMutation()
 	const [CategoryUpdate] = useCategoryUpdateMutation()
-	const [SubCategoryUpdate] =useSubCategoryUpdateMutation()
+	const [SubCategoryUpdate] = useSubCategoryUpdateMutation()
 	const [deleteSubCategory] = useSubCategoryDeleteMutation()
 	const [subCategoryModalOpen, setSubCategoryModalOpen] =
 		useState<boolean>(false)
+
 	const { data: SubCategoryAll, refetch: subCategoryRefetch } =
 		useSubCategoryAllGetQuery(undefined)
+
 	const [CategoryDel] = useCategoryDeleteMutation()
 	const [isStandardOpen, toggleStandard] = useToggle()
 	const [isDeleteUpdateOpen, toggleDeleteUpdate] = useToggle()
 	const [isSubCatDeleteUpdateOpen, toggleSubCatDeleteUpdate] = useToggle()
-	
 
 	const categorySave = async () => {
 		if (!category) {
@@ -85,6 +88,10 @@ const Categories = () => {
 		await setCategory('')
 	}
 	const subCategorySave = async () => {
+		if (!categoryId) {
+			toast.error('Please Select Category')
+			return
+		}
 		if (!subCategory) {
 			toast.error('Please enter sub category name')
 			return
@@ -126,14 +133,14 @@ const Categories = () => {
 		toggleDeleteUpdate()
 	}
 	const subCatUpdateModel = async (data: any) => {
-		setUpdateSubCategoryId(data.id);
+		setUpdateSubCategoryId(data.id)
 		setUpdateSubCategoryName(data.name)
 		setUpdateSubCategoryParentCategory(data.parentCategory)
-		toggleSubCatDeleteUpdate()	
+		toggleSubCatDeleteUpdate()
 	}
 	const subCatDelete = async () => {
 		try {
-			const res = await deleteSubCategory({ id:updateSubCategoryId}).unwrap()
+			const res = await deleteSubCategory({ id: updateSubCategoryId }).unwrap()
 			if (res.message === 'Sub category deleted') {
 				toast.success('Sub category deleted!')
 			}
@@ -147,11 +154,13 @@ const Categories = () => {
 		setUpdateSubCategoryName('')
 		setUpdateSubCategoryParentCategory('')
 	}
-	
 
 	const catUpdate = async () => {
 		try {
-			const res = await CategoryUpdate({ id:updateCategoryId, name:updateCategoryName }).unwrap()
+			const res = await CategoryUpdate({
+				id: updateCategoryId,
+				name: updateCategoryName,
+			}).unwrap()
 			if (res.message === 'Category updated') {
 				toast.success('Category updated!')
 			}
@@ -161,13 +170,17 @@ const Categories = () => {
 			toast.error('Something went wrong!')
 		}
 		toggleDeleteUpdate()
-	
+
 		setUpdateCategoryId('')
 		setUpdateCategoryName('')
 	}
 	const subCatUpdate = async () => {
 		try {
-			const res = await SubCategoryUpdate({ id:updateSubCategoryId, name:updateSubCategoryName, parentCategory:updateSubCategoryParentCategory }).unwrap()
+			const res = await SubCategoryUpdate({
+				id: updateSubCategoryId,
+				name: updateSubCategoryName,
+				parentCategory: updateSubCategoryParentCategory,
+			}).unwrap()
 			if (res.message === 'Sub category updated') {
 				toast.success('Sub Category updated!')
 			}
@@ -221,6 +234,7 @@ const Categories = () => {
 						<Form.Select
 							aria-label="Floating label select example"
 							onChange={(e) => setCategoryId(e.target.value)}>
+							<option defaultValue={''}></option>
 							{CategoryAll.map((category: any) => (
 								<option value={category._id}>{category.name}</option>
 							))}
@@ -327,7 +341,17 @@ const Categories = () => {
 														{(SubCategoryAll || []).map(
 															(sub: any) =>
 																record._id === sub.parentCategory && (
-																	<Button onClick={() => {subCatUpdateModel({id:sub._id,name:sub.name ,parentCategory:sub.parentCategory})}} variant="light">{sub.name}</Button>
+																	<Button
+																		onClick={() => {
+																			subCatUpdateModel({
+																				id: sub._id,
+																				name: sub.name,
+																				parentCategory: sub.parentCategory,
+																			})
+																		}}
+																		variant="light">
+																		{sub.name}
+																	</Button>
 																)
 														)}
 													</td>
