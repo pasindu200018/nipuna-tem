@@ -5,7 +5,6 @@ import {
 	Row,
 	Collapse as BootstrapCollapse,
 	Modal,
-	Form,
 } from 'react-bootstrap'
 
 // css
@@ -22,22 +21,20 @@ import { FormInput, PageSize, Table } from '@/components'
 import { PageBreadcrumb } from '@/components'
 import { useState } from 'react'
 import { DateRangePicker } from 'rsuite'
-import {  useToggle } from '@/hooks'
+import { useToggle } from '@/hooks'
+
+import { toast } from 'react-toastify'
+import {
+	useCreateLibrarianMutation,
+	useGetAllLibrarianQuery,
+} from '@/api/librariansSlice'
 
 const columns: ReadonlyArray<Column> = [
-	{
-		Header: 'Sr No',
-		accessor: 'srNo',
-		defaultCanSort: true,
-	},
-	{
-		Header: 'CreateDate',
-		accessor: 'createDate',
-		defaultCanSort: true,
-	},
+
+
 	{
 		Header: 'Name',
-		accessor: 'name',
+		accessor: 'firstName',
 		defaultCanSort: false,
 	},
 	{
@@ -47,7 +44,7 @@ const columns: ReadonlyArray<Column> = [
 	},
 	{
 		Header: 'Contact No',
-		accessor: 'contactNo',
+		accessor: 'phone',
 		defaultCanSort: false,
 	},
 	{
@@ -56,15 +53,11 @@ const columns: ReadonlyArray<Column> = [
 		defaultCanSort: false,
 	},
 	{
-		Header: 'Menu Access',
-		accessor: 'menuAccess',
+		Header: 'Address',
+		accessor: 'address',
 		defaultCanSort: false,
 	},
-	{
-		Header: 'Action',
-		accessor: 'action',
-		defaultCanSort: false,
-	},
+
 ]
 
 const sizePerPageList: PageSize[] = [
@@ -91,6 +84,56 @@ const Librarians = () => {
 	const toggle = () => setIsOpen(!isOpen)
 	const [isStandardOpen, toggleStandard] = useToggle()
 
+	const [firstName, setFirstName] = useState<String>('')
+	const [lastName, setLastName] = useState<String>('')
+	const [nic, setNic] = useState<String>('')
+	const [address, setAddress] = useState<String>('')
+	const [phone, setPhone] = useState<String>('')
+	const [email, setEmail] = useState<String>('')
+	const [password, setPassword] = useState<String>('')
+
+	const [CreateLibrarian] = useCreateLibrarianMutation()
+	const { data: Librarians, isLoading ,refetch } = useGetAllLibrarianQuery()
+
+
+	const CreateLib = async () => {
+		if (
+			!firstName ||
+			!lastName ||
+			!nic ||
+			!address ||
+			!phone ||
+			!email ||
+			!password
+		) {
+			toast.error('Please enter all fields')
+			return
+		}
+
+		try {
+			const res: any = await CreateLibrarian({
+				firstName,
+				lastName,
+				nic,
+				address,
+				phone,
+				email,
+				password,
+			}).unwrap()
+
+			if (res.message === 'Librarian Registered Succesfully') {
+				toast.success('Librarian Registered Succesfully')
+			} else {
+				toast.error(res.message)
+			}
+		} catch (err) {
+			console.log(err)
+			toast.error('Something Wrong')
+		}
+		refetch()
+		toggleStandard()
+	}
+
 	return (
 		<>
 			<Modal show={isStandardOpen} onHide={toggleStandard}>
@@ -103,155 +146,57 @@ const Librarians = () => {
 						type="text"
 						name="firstName"
 						containerClass="mb-3"
-						// register={register}
-						key="text"
-						// errors={errors}
-						// control={control}
+						onChange={(e) => setFirstName(e.target.value)}
 					/>
 					<FormInput
 						label="Last Name"
 						type="text"
 						name="lastName"
 						containerClass="mb-3"
-						// register={register}
-						key="text"
-						// errors={errors}
-						// control={control}
+						onChange={(e) => setLastName(e.target.value)}
 					/>
 					<FormInput
 						label="NIC"
 						type="text"
 						name="nic"
 						containerClass="mb-3"
-						// register={register}
-						key="text"
-						// errors={errors}
-						// control={control}
+						onChange={(e) => setNic(e.target.value)}
 					/>
 					<FormInput
 						label="Address"
 						type="text"
 						name="address"
 						containerClass="mb-3"
-						// register={register}
-						key="text"
-						// errors={errors}
-						// control={control}
+						onChange={(e) => setAddress(e.target.value)}
 					/>
 					<FormInput
 						label="Contact Number"
 						type="text"
 						name="contactNumber"
 						containerClass="mb-3"
-						// register={register}
-						key="text"
-						// errors={errors}
-						// control={control}
+						onChange={(e) => setPhone(e.target.value)}
 					/>
 					<FormInput
 						label="Email"
 						type="text"
 						name="text"
 						containerClass="mb-3"
-						// register={register}
-						key="text"
-						// errors={errors}
-						// control={control}
+						onChange={(e) => setEmail(e.target.value)}
 					/>
 					<FormInput
 						label="Password"
-						type="password"
+						type="text"
 						name="text"
 						containerClass="mb-3"
-						// register={register}
 						key="text"
-						// errors={errors}
-						// control={control}
+						onChange={(e) => setPassword(e.target.value)}
 					/>
-					<h6 className="fs-15 mt-3">Status</h6>
-					<Form.Select aria-label="Floating label select example">
-						<option defaultValue="selected">Active</option>
-						<option defaultValue="2">Inactive</option>
-					</Form.Select>
-					<h6 className="fs-15 mt-3">Library Access Type</h6>
-					<Form.Select aria-label="Floating label select example">
-						<option defaultValue="selected">Sinhala</option>
-						<option defaultValue="2">English</option>
-					</Form.Select>
-					<h6 className="fs-15 mt-3">Inline</h6>
-					<div className="mt-2 ">
-						<Form.Check
-							className="form-check-inline m-2"
-							id="customCheck3"
-							label="Users"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Readers"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Categories"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Books"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Authors"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Statics"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Sales"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Packages"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Notifications"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Settings"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Shop"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Payment"
-						/>
-						<Form.Check
-							className="form-check-inline m-2"
-							id="Readers"
-							label="Librarians"
-						/>
-					</div>
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="light" onClick={toggleStandard}>
 						Close
 					</Button>
-					<Button variant="primary" onClick={toggleStandard}>
+					<Button variant="primary" onClick={CreateLib}>
 						Create Librarian
 					</Button>
 				</Modal.Footer>
@@ -311,14 +256,16 @@ const Librarians = () => {
 						</Card.Body>
 
 						<Card.Body>
-							<Table<Employee>
-								columns={columns}
-								data={employeeRecords}
-								pageSize={5}
-								sizePerPageList={sizePerPageList}
-								isSortable={true}
-								pagination={true}
-							/>
+							{!isLoading && (
+								<Table<Employee>
+									columns={columns}
+									data={Librarians}
+									pageSize={5}
+									sizePerPageList={sizePerPageList}
+									isSortable={true}
+									pagination={true}
+								/>
+							)}
 						</Card.Body>
 					</Card>
 				</Col>
