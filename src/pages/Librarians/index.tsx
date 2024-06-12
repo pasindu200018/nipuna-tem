@@ -93,7 +93,7 @@ const Librarians = () => {
 	const [password, setPassword] = useState<String>('')
 
 	const [CreateLibrarian] = useCreateLibrarianMutation()
-	const { data: Librarians, isLoading ,refetch } = useGetAllLibrarianQuery()
+	const { data: Librarians, isLoading ,refetch } = useGetAllLibrarianQuery(undefined)
 
 
 	const CreateLib = async () => {
