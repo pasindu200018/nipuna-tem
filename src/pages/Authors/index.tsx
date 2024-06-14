@@ -12,13 +12,10 @@ import {
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import 'rsuite/dist/rsuite-no-reset.min.css'
 
-
-
-
 // components
-import { FormInput} from '@/components'
+import { FormInput } from '@/components'
 import { PageBreadcrumb } from '@/components'
-import {  useState } from 'react'
+import { useState } from 'react'
 import { DateRangePicker } from 'rsuite'
 import {
 	useCreateAuthorMutation,
@@ -29,23 +26,22 @@ import { useToggle } from '@/hooks'
 
 import { toast } from 'react-toastify'
 
-
-
 const Authors = () => {
 	const [isOpen, setIsOpen] = useState<boolean>(true)
 	const [isStandardOpen, toggleStandard] = useToggle()
+	const [id, setId] = useState<String>('')
 
 	const [firstName, setFirstName] = useState<String>('')
-	const [id, setId] = useState<String>('')
 	const [lastName, setLastName] = useState<String>('')
 	const [nationality, setNationality] = useState<String>('')
 	const [description, setDescription] = useState<String>('')
-	const [firstPublishDate, setFirstPublishDate] = useState<String>('')
-	const [phone, setPhone] = useState<String>('')
 	const [died, setDied] = useState<String>('')
 	const [password, setPassword] = useState<String>('')
-	const [profileImage, setProfileImage] = useState<File | null>(null)
+	const [firstPublishDate, setFirstPublishDate] = useState<String>('')
+	const [phone, setPhone] = useState<String>('')
+
 	const [typeUpdate, setTypeUpdate] = useState<Boolean>()
+	const [profileImage, setProfileImage] = useState<File | null>(null)
 
 	const [createAuthor] = useCreateAuthorMutation()
 	const { data, isLoading, refetch } = useGetAllAuthorQuery(undefined)
@@ -56,30 +52,27 @@ const Authors = () => {
 	const CreateAuthor = async () => {
 		try {
 			const formData = new FormData()
-				formData.append('firstname', firstName)
-				formData.append('lastname', lastName)
-				formData.append('nationality', nationality)
-				formData.append('description', description)
-				formData.append('phone', phone)
-				formData.append('died', died)
-				formData.append('password', password)
-				formData.append('firstPublishDate', firstPublishDate)
+			formData.append('firstname', firstName.toString())
+			formData.append('lastname', lastName.toString())
+			formData.append('nationality', nationality.toString())
+			formData.append('description', description.toString())
+			formData.append('phone', phone.toString())
+			formData.append('died', died.toString())
+			formData.append('password', password.toString())
+			formData.append('firstPublishDate', firstPublishDate.toString())
+			if (profileImage) {
+				formData.append('profileImage', profileImage)
+			} else {
+				toast.error('Please add profile image')
+				return
+			}
 
-				if (profileImage) {
-					formData.append('profileImage', profileImage)
-				} else {
-					toast.error('Please add profile image')
-					return
-				}
-
-			
 			if (typeUpdate) {
-				 const res = await updateAuthor({formData,id}).unwrap()
+				const res = await updateAuthor({ formData, id }).unwrap()
 				if (res.message == 'Author updated') {
 					toast.success('Author updated')
 				}
 			} else {
-				
 				const res = await createAuthor(formData).unwrap()
 				if (res.message == 'Author Created') {
 					toast.success('Author created')
@@ -105,10 +98,9 @@ const Authors = () => {
 		setFirstPublishDate('')
 		setProfileImage(null)
 		setId('')
-
 	}
 
-	const updateAuthorModel = (record:any) => {
+	const updateAuthorModel = (record: any) => {
 		setTypeUpdate(true)
 		toggleStandard()
 		console.log(record.record)
@@ -293,7 +285,7 @@ const Authors = () => {
 														<Button
 															variant="light"
 															onClick={() => {
-																updateAuthorModel({record})
+																updateAuthorModel({ record })
 															}}>
 															<i className="ri-heart-line" />
 														</Button>
