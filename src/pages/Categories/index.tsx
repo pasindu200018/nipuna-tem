@@ -85,7 +85,7 @@ const Categories = () => {
 		toggleStandard()
 		categoryRefetch()
 		await subCategoryRefetch()
-		await setCategory('')
+		setCategory('')
 	}
 	const subCategorySave = async () => {
 		if (!categoryId) {

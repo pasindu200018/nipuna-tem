@@ -19,6 +19,7 @@ import { useState } from 'react'
 import { DateRangePicker } from 'rsuite'
 import {
 	useCreateAuthorMutation,
+	useDeleteAuthorMutation,
 	useGetAllAuthorQuery,
 	useUpdateAuthorMutation,
 } from '@/api/authorSlice'
@@ -27,7 +28,7 @@ import { useToggle } from '@/hooks'
 import { toast } from 'react-toastify'
 
 const Authors = () => {
-	const [isOpen, setIsOpen] = useState<boolean>(true)
+	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const [isStandardOpen, toggleStandard] = useToggle()
 	const [id, setId] = useState<String>('')
 
@@ -44,8 +45,9 @@ const Authors = () => {
 	const [profileImage, setProfileImage] = useState<File | null>(null)
 
 	const [createAuthor] = useCreateAuthorMutation()
-	const { data, isLoading, refetch } = useGetAllAuthorQuery(undefined)
+	const { data, isLoading, refetch: authorRefetch } = useGetAllAuthorQuery(undefined)
 	const [updateAuthor] = useUpdateAuthorMutation()
+	const [deleteUser] = useDeleteAuthorMutation()
 
 	const toggle = () => setIsOpen(!isOpen)
 
@@ -79,10 +81,23 @@ const Authors = () => {
 				}
 			}
 		} catch (error) {
+			console.log(error)
 			toast.error('Something went wrong!')
 		}
 		toggleStandard()
-		refetch()
+		await authorRefetch()
+	}
+
+	const deleteAuthor = async (id:any) => {
+		try {
+			const res = await deleteUser(id).unwrap()
+			if (res.message == 'Author deleted') {
+				toast.success('Author deleted')	
+			}
+		} catch (error) {
+			toast.error('Something went wrong!')
+		}
+		await authorRefetch()	
 	}
 
 	const createAuthorModel = () => {
@@ -290,12 +305,14 @@ const Authors = () => {
 															<i className="ri-heart-line" />
 														</Button>
 
-														{/* <Button
+														<Button
 															className="ms-1"
-															onClick={() => categoryDelete(record._id)}
+															onClick={() => {
+																deleteAuthor({ id: record._id })
+															}}
 															variant="danger">
 															<i className="ri-heart-line" />
-														</Button> */}
+														</Button>
 													</td>
 												</tr>
 											)

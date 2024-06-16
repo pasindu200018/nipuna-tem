@@ -1,8 +1,4 @@
-import {
-	Card,
-	Col,
-	Row,
-} from 'react-bootstrap'
+import { Button, Card, Col, Row } from 'react-bootstrap'
 
 // css
 import 'react-bootstrap-typeahead/css/Typeahead.css'
@@ -14,9 +10,8 @@ import { Column } from 'react-table'
 import { Employee } from './types'
 
 // components
-import {  PageSize, Table } from '@/components'
+import { PageSize, Table } from '@/components'
 import { PageBreadcrumb } from '@/components'
-
 
 const columns: ReadonlyArray<Column> = [
 	{
@@ -74,10 +69,14 @@ const Sales = () => {
 	return (
 		<>
 			<PageBreadcrumb title="Sales" subName="Sales" />
+			<div></div>
 			<Row>
 				<Col>
 					<Card>
 						<Card.Body>
+							<Button variant="info m-2">
+								<i className="bi bi-plus-lg" /> <span>Sales</span>
+							</Button>
 							<Table<Employee>
 								columns={columns}
 								data={employeeRecords}

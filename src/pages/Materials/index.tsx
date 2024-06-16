@@ -22,6 +22,9 @@ import { PageBreadcrumb } from '@/components'
 import { useState } from 'react'
 import { DateRangePicker } from 'rsuite'
 import { useToggle } from '@/hooks'
+import { useCreateMaterialMutation, useGetAllMaterialQuery } from '@/api/materialSlice'
+import { toast } from 'react-toastify'
+
 
 const columns: ReadonlyArray<Column> = [
 	{
@@ -91,7 +94,9 @@ const sizePerPageList: PageSize[] = [
 ]
 
 const Materials = () => {
-	const [isOpenFilter, setIsOpenFilter] = useState<boolean>(true)
+	const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
+	const { data: GetAllMaterial } = useGetAllMaterialQuery(undefined)	
+
 
 	const toggle = () => setIsOpenFilter(!isOpenFilter)
 
@@ -108,8 +113,10 @@ const Materials = () => {
 								</Button>
 								<ToggleBetweenModals />
 							</div>
+						
 						</Card.Header>
 						<Card.Body>
+						
 							<BootstrapCollapse in={isOpenFilter}>
 								<div>
 									<Row>
@@ -135,7 +142,13 @@ const Materials = () => {
 										</Col>
 									</Row>
 								</div>
+							
 							</BootstrapCollapse>
+							{(GetAllMaterial || []).map((material:any) => (
+								<Button className="btn-outline-purple m-1" >
+								{material.name}
+						   </Button>
+							))}
 						</Card.Body>
 
 						<Card.Body>
@@ -160,12 +173,66 @@ export default Materials
 const ToggleBetweenModals = () => {
 	const [isOpen, toggleModal] = useToggle()
 	const [isNextOpen, toggleNextModal] = useToggle()
+	const [CreateMaterial] = useCreateMaterialMutation()
+	const [isMaterialsOpen, toggleMaterialsModal] = useToggle()
 	const [isNext2Open, toggleNext2Modal] = useToggle()
+
+	const [name, setName] = useState('');
+
+	const materialsCreate = async () => {
+		if(!name){
+			toast.error('Please enter name')
+			return
+		}
+		try {
+			const res =  await CreateMaterial({name}).unwrap();
+			if(res.message == 'Material Added'){
+				toast.success('Material Created')
+			}
+		} catch (error) {
+			toast.error('Something went wrong!')
+		}
+	}
 	return (
 		<>
-			<Button variant="info" onClick={toggleModal}>
+		<div>
+			<Button variant="info m-2" onClick={toggleModal}>
 				<i className="bi bi-plus-lg" /> <span>Add New E-Book</span>
 			</Button>
+			<Button variant="info" onClick={toggleMaterialsModal}>
+				<i className="bi bi-plus-lg" /> <span>Add Materials</span>
+			</Button>
+		</div>
+		
+		<Modal
+				className="fade"
+				size="lg"
+				show={isMaterialsOpen}
+				onHide={toggleMaterialsModal}
+				centered>
+				<Modal.Header closeButton>
+					<h5 className="modal-title">Material </h5>
+				</Modal.Header>
+				<Modal.Body className="modal-body">
+					<FormInput
+						label="Name"
+						type="text"
+						name="name"
+						onChange={(e) => setName(e.target.value)}
+						containerClass="mb-3"
+						key="text"
+					/>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button
+						variant="primary"
+						onClick={() => {
+							materialsCreate()
+						}}>
+						Create
+					</Button>
+				</Modal.Footer>
+			</Modal>
 
 			{/* 1st model  */}
 			<Modal

@@ -23,9 +23,16 @@ export const authorSlice = apiSlice.injectEndpoints({
                 body: data.formData,
             })
         }),
+        deleteAuthor: builder.mutation({
+            query: (data) => ({
+                url: `/author/delete/${data.id}`,
+                method: 'POST',
+            })
+        }),
+        
         
     })
 })
 
-export const { useCreateAuthorMutation, useGetAllAuthorQuery, useUpdateAuthorMutation } = authorSlice
+export const { useCreateAuthorMutation, useGetAllAuthorQuery, useUpdateAuthorMutation , useDeleteAuthorMutation} = authorSlice
 

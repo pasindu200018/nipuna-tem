@@ -82,9 +82,9 @@ const sizePerPageList: PageSize[] = [
 	},
 ]
 
+
+
 const ProductCategory = () => {
-	// const [isOpen, setIsOpen] = useState<boolean>(false)
-	// const toggle = () => setIsOpen(!isOpen)
 	return (
 		<>
 			<PageBreadcrumb title="Product Category" subName="Shop" />
@@ -98,6 +98,7 @@ const ProductCategory = () => {
 									<span>Add Product Category</span>
 								</Button>
 							</div>
+						
 						</Card.Header>
 
 						<Card.Body>
