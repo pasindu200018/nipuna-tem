@@ -37,9 +37,9 @@ const Authors = () => {
 	const [nationality, setNationality] = useState<String>('')
 	const [description, setDescription] = useState<String>('')
 	const [died, setDied] = useState<String>('')
-	const [password, setPassword] = useState<String>('')
+	const [position, setPosition] = useState<String>('')
 	const [firstPublishDate, setFirstPublishDate] = useState<String>('')
-	const [phone, setPhone] = useState<String>('')
+	const [penName, setPenName] = useState<String>('')
 
 	const [typeUpdate, setTypeUpdate] = useState<Boolean>()
 	const [profileImage, setProfileImage] = useState<File | null>(null)
@@ -58,9 +58,9 @@ const Authors = () => {
 			formData.append('lastname', lastName.toString())
 			formData.append('nationality', nationality.toString())
 			formData.append('description', description.toString())
-			formData.append('phone', phone.toString())
+			formData.append('penName', penName.toString())
 			formData.append('died', died.toString())
-			formData.append('password', password.toString())
+			formData.append('position', position.toString())
 			formData.append('firstPublishDate', firstPublishDate.toString())
 			if (profileImage) {
 				formData.append('profileImage', profileImage)
@@ -107,9 +107,9 @@ const Authors = () => {
 		setLastName('')
 		setNationality('')
 		setDescription('')
-		setPhone('')
+		setPenName('')
 		setDied('')
-		setPassword('')
+		setPosition('')
 		setFirstPublishDate('')
 		setProfileImage(null)
 		setId('')
@@ -123,9 +123,9 @@ const Authors = () => {
 		setLastName(record.record.lastname)
 		setNationality(record.record.nationality)
 		setDescription(record.record.description)
-		setPhone(record.record.phone)
+		setPenName(record.record.penName)
 		setDied(record.record.died)
-		setPassword(record.record.password)
+		setPosition(record.record.position)
 		setFirstPublishDate(record.record.firstPublishDate)
 		setId(record.record._id)
 	}
@@ -171,7 +171,7 @@ const Authors = () => {
 						onChange={(e) => setNationality(e.target.value)}
 					/>
 					<FormInput
-						label="Address"
+						label="Description"
 						type="text"
 						name="address"
 						defaultValue={`${description}`}
@@ -179,12 +179,12 @@ const Authors = () => {
 						onChange={(e) => setDescription(e.target.value)}
 					/>
 					<FormInput
-						label="Contact Number"
+						label="penName"
 						type="text"
 						name="contactNumber"
-						defaultValue={`${phone}`}
+						defaultValue={`${penName}`}
 						containerClass="mb-3"
-						onChange={(e) => setPhone(e.target.value)}
+						onChange={(e) => setPenName(e.target.value)}
 					/>
 					<FormInput
 						label="FirstPublishDate"
@@ -203,13 +203,13 @@ const Authors = () => {
 						onChange={(e) => setDied(e.target.value)}
 					/>
 					<FormInput
-						label="Password"
+						label="Position"
 						type="text"
-						defaultValue={`${password}`}
+						defaultValue={`${position}`}
 						name="text"
 						containerClass="mb-3"
 						key="text"
-						onChange={(e) => setPassword(e.target.value)}
+						onChange={(e) => setPosition(e.target.value)}
 					/>
 				</Modal.Body>
 				<Modal.Footer>

@@ -148,16 +148,16 @@ const profileMenus: ProfileOption[] = [
 		icon: 'ri-settings-4-line',
 		redirectTo: '/pages/profile',
 	},
-	{
-		label: 'Support',
-		icon: 'ri-customer-service-2-line',
-		redirectTo: '/pages/faq',
-	},
-	{
-		label: 'Lock Screen',
-		icon: 'ri-lock-password-line',
-		redirectTo: '/auth/lock-screen',
-	},
+	// {
+	// 	label: 'Support',
+	// 	icon: 'ri-customer-service-2-line',
+	// 	redirectTo: '/pages/faq',
+	// },
+	// {
+	// 	label: 'Lock Screen',
+	// 	icon: 'ri-lock-password-line',
+	// 	redirectTo: '/auth/lock-screen',
+	// },
 	{
 		label: 'Logout',
 		icon: 'ri-logout-box-line',
@@ -286,32 +286,11 @@ const Topbar = ({ toggleMenu, navOpen }: TopbarProps) => {
 								<span />
 							</div>
 						</button>
-						{/* Topbar Search Form */}
-						<div className="app-search d-none d-lg-block">
-							<form>
-								<div className="input-group">
-									<input
-										type="search"
-										className="form-control"
-										placeholder="Search..."
-									/>
-									<span className="ri-search-line search-icon text-muted" />
-								</div>
-							</form>
-						</div>
 					</div>
 					<ul className="topbar-menu d-flex align-items-center gap-3">
-						<li className="dropdown d-lg-none">
-							<SearchDropDown />
-						</li>
+			
 						<li className="dropdown">
 							<LanguageDropdown />
-						</li>
-						<li className="dropdown notification-list">
-							<MessageDropdown messages={Messages} />
-						</li>
-						<li className="dropdown notification-list">
-							<NotificationDropdown notifications={Notifications} />
 						</li>
 						<li className="d-none d-sm-inline-block">
 							<button className="nav-link" onClick={handleRightSideBar}>

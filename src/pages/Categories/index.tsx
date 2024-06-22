@@ -60,8 +60,8 @@ const Categories = () => {
 	const [subCategoryModalOpen, setSubCategoryModalOpen] =
 		useState<boolean>(false)
 
-	const { data: SubCategoryAll, refetch: subCategoryRefetch } =
-		useSubCategoryAllGetQuery(undefined)
+
+	const { data: SubCategoryAll, refetch: subCategoryRefetch } =   useSubCategoryAllGetQuery(undefined)
 
 	const [CategoryDel] = useCategoryDeleteMutation()
 	const [isStandardOpen, toggleStandard] = useToggle()

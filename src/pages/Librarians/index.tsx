@@ -30,8 +30,6 @@ import {
 } from '@/api/librariansSlice'
 
 const columns: ReadonlyArray<Column> = [
-
-
 	{
 		Header: 'Name',
 		accessor: 'firstName',
@@ -259,7 +257,7 @@ const Librarians = () => {
 							{!isLoading && (
 								<Table<Employee>
 									columns={columns}
-									data={Librarians}
+									data={(Librarians || [])}
 									pageSize={5}
 									sizePerPageList={sizePerPageList}
 									isSortable={true}

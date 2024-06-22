@@ -5,6 +5,7 @@ import {
 	Row,
 	Collapse as BootstrapCollapse,
 	Modal,
+	ModalBody,
 } from 'react-bootstrap'
 
 // css
@@ -22,9 +23,13 @@ import { PageBreadcrumb } from '@/components'
 import { useState } from 'react'
 import { DateRangePicker } from 'rsuite'
 import { useToggle } from '@/hooks'
-import { useCreateMaterialMutation, useGetAllMaterialQuery } from '@/api/materialSlice'
+import {
+	useCreateMaterialMutation,
+	useDeleteMaterialMutation,
+	useGetAllMaterialQuery,
+	useUpdateMaterialMutation,
+} from '@/api/materialSlice'
 import { toast } from 'react-toastify'
-
 
 const columns: ReadonlyArray<Column> = [
 	{
@@ -95,14 +100,76 @@ const sizePerPageList: PageSize[] = [
 
 const Materials = () => {
 	const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
-	const { data: GetAllMaterial } = useGetAllMaterialQuery(undefined)	
-
+	const { data: GetAllMaterial , refetch  } = useGetAllMaterialQuery(undefined)
+	const [UpdateMaterial, {isSuccess}] = useUpdateMaterialMutation(undefined)
+	const [DeletedMaterial] = useDeleteMaterialMutation(undefined)
+	const [isStandardOpen, toggleStandard] = useToggle()
+	const [materialId, setMaterialId] = useState<string>('')
+	const [materialName, setMaterialName] = useState<string>('')
 
 	const toggle = () => setIsOpenFilter(!isOpenFilter)
+
+	const materialUpdate = async() => {
+		try {
+			const res: any = await UpdateMaterial({ id: materialId, name: materialName }).unwrap()
+			if(res) {
+				toast.success('Material Updated')
+			}
+		} catch (error) {
+			toast.error('Something went wrong!')
+		}
+		refetch()
+		toggleStandard()
+	}
+	const materialDelete = async() => {
+		 const res = await DeletedMaterial({ id: materialId }).unwrap()
+			if(res) {
+				toast.success("Material Deleted!")
+			}else {
+				toast.error('Something went wrong!')
+			}
+			refetch()
+			toggleStandard()
+	}
+
+
 
 	return (
 		<>
 			<PageBreadcrumb title="Materials" subName="Tables" />
+			<Modal show={isStandardOpen} onHide={toggleStandard}>
+				<Modal.Header onHide={toggleStandard} closeButton>
+					<Modal.Title as="h4">Materials edit</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<FormInput
+						label="Materials"
+						type="text"
+						name="categoryName"
+						containerClass="mb-3"
+						key="text"
+						defaultValue={materialName}
+						onChange={(e) => setMaterialName(e.target.value)}
+					/>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="light" onClick={toggleStandard}>
+						Close
+					</Button>
+					<Button
+						variant="primary"
+						onClick={materialDelete}
+					>
+						Delete
+					</Button>
+					<Button
+						variant="primary"
+						onClick={ materialUpdate}
+					>
+						Update
+					</Button>
+				</Modal.Footer>
+			</Modal>
 			<Row>
 				<Col>
 					<Card>
@@ -111,12 +178,10 @@ const Materials = () => {
 								<Button className="btn-outline-purple" onClick={toggle}>
 									<i className="ri-equalizer-line me-1" /> Filter
 								</Button>
-								<ToggleBetweenModals />
+								<ToggleBetweenModals refetch={refetch}/>
 							</div>
-						
 						</Card.Header>
 						<Card.Body>
-						
 							<BootstrapCollapse in={isOpenFilter}>
 								<div>
 									<Row>
@@ -142,12 +207,17 @@ const Materials = () => {
 										</Col>
 									</Row>
 								</div>
-							
 							</BootstrapCollapse>
-							{(GetAllMaterial || []).map((material:any) => (
-								<Button className="btn-outline-purple m-1" >
-								{material.name}
-						   </Button>
+							{(GetAllMaterial || []).map((material: any) => (
+								<Button
+									className="btn-outline-purple m-1"
+									onClick={() => {
+										toggleStandard()
+										setMaterialId(material._id)
+										setMaterialName(material.name)
+									}}>
+									{material.name}
+								</Button>
 							))}
 						</Card.Body>
 
@@ -170,41 +240,42 @@ const Materials = () => {
 
 export default Materials
 
-const ToggleBetweenModals = () => {
+const ToggleBetweenModals = (refetch:any) => {
 	const [isOpen, toggleModal] = useToggle()
 	const [isNextOpen, toggleNextModal] = useToggle()
 	const [CreateMaterial] = useCreateMaterialMutation()
 	const [isMaterialsOpen, toggleMaterialsModal] = useToggle()
 	const [isNext2Open, toggleNext2Modal] = useToggle()
 
-	const [name, setName] = useState('');
+	const [name, setName] = useState('')
 
 	const materialsCreate = async () => {
-		if(!name){
+		if (!name) {
 			toast.error('Please enter name')
 			return
 		}
 		try {
-			const res =  await CreateMaterial({name}).unwrap();
-			if(res.message == 'Material Added'){
+			 const res = await CreateMaterial({ name }).unwrap()
+			if (res) {
 				toast.success('Material Created')
 			}
+			refetch()
 		} catch (error) {
 			toast.error('Something went wrong!')
 		}
 	}
 	return (
 		<>
-		<div>
-			<Button variant="info m-2" onClick={toggleModal}>
-				<i className="bi bi-plus-lg" /> <span>Add New E-Book</span>
-			</Button>
-			<Button variant="info" onClick={toggleMaterialsModal}>
-				<i className="bi bi-plus-lg" /> <span>Add Materials</span>
-			</Button>
-		</div>
-		
-		<Modal
+			<div>
+				<Button variant="info m-2" onClick={toggleModal}>
+					<i className="bi bi-plus-lg" /> <span>Add New E-Book</span>
+				</Button>
+				<Button variant="info" onClick={toggleMaterialsModal}>
+					<i className="bi bi-plus-lg" /> <span>Add Materials</span>
+				</Button>
+			</div>
+
+			<Modal
 				className="fade"
 				size="lg"
 				show={isMaterialsOpen}
@@ -302,7 +373,6 @@ const ToggleBetweenModals = () => {
 					<FormInput
 						label="First Printed Year (optional)"
 						type="date"
-						
 						name="First Printed Year"
 						containerClass="mb-3"
 						key="text"

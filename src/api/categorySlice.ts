@@ -5,19 +5,19 @@ export const categorySlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         categoryAllGet: builder.query({
             query: () => ({
-                url: '/category/main/all',
+                url: '/categories/main/all',
                 method: 'GET',
             })
         }),
         subCategoryAllGet: builder.query({
             query: () => ({
-                url: 'category/sub/all',
+                url: 'categories/sub/all',
                 method: 'GET',
             })
         }),
         categoryCreate: builder.mutation({
             query: (data) => ({
-                url: '/category/main/store',
+                url: '/categories/main/store',
                 method: 'POST',
                 body: data
             })
@@ -25,14 +25,14 @@ export const categorySlice = apiSlice.injectEndpoints({
 
         categoryDelete: builder.mutation({
             query: (data) => ({
-                url: `/category/main/delete/${data.id}`,
+                url: `/categories/main/delete/${data.id}`,
                 method: 'POST',
             })
         }),
 
         subCategoryCreate: builder.mutation({
             query: (data) => ({
-                url: '/category/sub/store',
+                url: '/categories/sub/store',
                 method: 'POST',
                 body: data      
             })
@@ -40,21 +40,21 @@ export const categorySlice = apiSlice.injectEndpoints({
 
         CategoryUpdate: builder.mutation({
             query: (data) => ({
-                url: `/category/main/update/${data.id}`,
+                url: `/categories/main/update/${data.id}`,
                 method: 'POST',
                 body: data,
             })
         }),
         SubCategoryUpdate: builder.mutation({
             query: (data) => ({
-                url: `/category/sub/update/${data.id}`,
+                url: `/categories/sub/update/${data.id}`,
                 method: 'POST',
                 body: data,
             })
         }),
         SubCategoryDelete: builder.mutation({
             query: (data) => ({
-                url: `/category/sub/delete/${data.id}`,
+                url: `/categories/sub/delete/${data.id}`,
                 method: 'POST',
             })
         }),

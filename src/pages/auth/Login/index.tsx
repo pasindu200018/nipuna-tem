@@ -9,7 +9,7 @@ import { VerticalForm, FormInput, PageBreadcrumb } from '@/components'
 import { useLoginMutation } from '@/api/authSlice'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '@/features/authSlice'
 
 
@@ -44,9 +44,12 @@ const Login = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const [email, setEmail] = useState('nipuna@gmail.com')
+	const user = useSelector((state:any)=>state.auth?.userInfo?.token)
+	
+	const [email, setEmail] = useState('user@gmail.com')
 	const [password, setPassword] = useState('12345678')
 	const [login, { isLoading }] = useLoginMutation()
+
 
 	const submitHandler = async () => {
 		if (!email || !password) {
@@ -58,7 +61,8 @@ const Login = () => {
 			if (res?.data?.token) {
 				toast.success(res?.data?.message)
 				console.log(res.data.user)
-				dispatch(setUser({token:res?.data?.token,userInfo:res?.data?.user}))
+
+				dispatch(setUser({token:res?.data?.token,userInfo:res?.data}))
 				navigate("/", { replace: true });
 			}
 			else if (res?.error) {
@@ -74,7 +78,7 @@ const Login = () => {
 		<>
 			<PageBreadcrumb title="Log In" />
 
-			{false && <Navigate to="/" replace />}
+			{user && <Navigate to="/" replace />}
 
 			<AuthLayout
 				authTitle="Sign In"
@@ -84,7 +88,7 @@ const Login = () => {
 				<VerticalForm<UserData>
 					onSubmit={submitHandler}
 					resolver={schemaResolver}
-					defaultValues={{ email: 'nipuna@gmail.com', password: '1234567' }}>
+					>
 					<FormInput
 						label="Email address"
 						type="text"
@@ -97,6 +101,16 @@ const Login = () => {
 					/>
 					<FormInput
 						label="Password"
+						type="Password"
+						name="Password"
+						placeholder="Enter your Password"
+						containerClass="mb-3"
+						onChange={(e) => setPassword(e.target.value)}
+						defaultValue={password}
+						required
+					/>
+					{/* <FormInput
+						label="Password"
 						name="password"
 						type="password"
 						required
@@ -108,7 +122,7 @@ const Login = () => {
 						<Link to="/auth/forgot-password" className="text-muted float-end">
 							<small>Forgot your password?</small>
 						</Link>
-					</FormInput>
+					</FormInput> */}
 					<FormInput
 						label="Remember me"
 						type="checkbox"

@@ -14,12 +14,10 @@ import { logout } from '@/features/authSlice'
 
 const Logout = () => {
 	const dispatch = useDispatch();
-	const { removeSession } = useAuthContext()
 
 	useEffect(() => {
 		dispatch(logout())
-		removeSession()
-	}, [removeSession])
+	}, [])
 
 	const BottomLink = () => {
 		return (

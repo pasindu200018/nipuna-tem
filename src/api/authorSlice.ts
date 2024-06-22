@@ -5,27 +5,27 @@ export const authorSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         createAuthor: builder.mutation({
             query: (data) => ({
-                url: '/author/store',
+                url: '/authors/store',
                 method: 'POST',
                 body: data
             })
         }),
         getAllAuthor: builder.query({
             query: () => ({
-                url: '/author/all',
+                url: '/authors/all',
                 method: 'GET',
             })
         }),
         updateAuthor: builder.mutation({
             query: (data) => ({
-                url: `/author/update/${data.id}`,
+                url: `/authors/update/${data.id}`,
                 method: 'POST',
                 body: data.formData,
             })
         }),
         deleteAuthor: builder.mutation({
             query: (data) => ({
-                url: `/author/delete/${data.id}`,
+                url: `/authors/delete/${data.id}`,
                 method: 'POST',
             })
         }),

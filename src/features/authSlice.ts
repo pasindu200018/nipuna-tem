@@ -15,6 +15,7 @@ const authSlice = createSlice({
           localStorage.removeItem("Bearer");
           localStorage.removeItem("userInfo");
           state.userInfo = null;
+
         } else {
           if (action.payload.token) localStorage.setItem("Bearer", action.payload.token);
 
